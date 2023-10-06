@@ -23,10 +23,5 @@ public:
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* Mesh;
 
-	virtual void TurnedOn();
-
-	virtual void TurnedOff();
-
 	virtual void UseEquipment();
-
 };

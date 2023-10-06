@@ -21,16 +21,6 @@ void AEquipment::Tick(float DeltaTime)
 
 }
 
-void AEquipment::TurnedOn()
-{
-	
-}
-
-void AEquipment::TurnedOff()
-{
-	
-}
-
 void AEquipment::UseEquipment()
 {
 
