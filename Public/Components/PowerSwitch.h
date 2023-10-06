@@ -4,7 +4,7 @@
 #include "Components/ActorComponent.h"
 #include "PowerSwitch.generated.h"
 
-class AEquipment;
+class ASwitchable;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SPECTRE_API UPowerSwitch : public UActorComponent
@@ -15,7 +15,7 @@ public:
 
 	UPowerSwitch();
 
-	AEquipment* Parent;
+	ASwitchable* Parent;
 
 	bool bPoweredOn = false;
 
