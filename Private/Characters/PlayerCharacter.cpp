@@ -30,7 +30,7 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
+	if (const APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
@@ -83,7 +83,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 void APlayerCharacter::Move(const FInputActionValue& Value)
 {
-	FVector2D MovementVector = Value.Get<FVector2D>();
+	const FVector2D MovementVector = Value.Get<FVector2D>();
 
 	if (Controller != nullptr)
 	{
@@ -101,7 +101,7 @@ void APlayerCharacter::Move(const FInputActionValue& Value)
 
 void APlayerCharacter::Look(const FInputActionValue& Value)
 {
-	FVector2D LookAxisVector = Value.Get<FVector2D>();
+	const FVector2D LookAxisVector = Value.Get<FVector2D>();
 
 	if (Controller != nullptr)
 	{
@@ -122,7 +122,7 @@ void APlayerCharacter::SprintHeld(const FInputActionValue& Value)
 	if (Stamina == nullptr) return;
 	if (!bSprinting) return;
 	
-	float DeltaSeconds = UGameplayStatics::GetWorldDeltaSeconds(this);
+	const float DeltaSeconds = UGameplayStatics::GetWorldDeltaSeconds(this);
 
 	Stamina->UseStamina(DeltaSeconds * SprintDrain);
 
@@ -158,7 +158,7 @@ void APlayerCharacter::ToggleEquipment(const FInputActionValue& Value)
 {
 	if (Inventory == nullptr) return;
 
-	if (AEquipment* Equipment = Inventory->GetCurrentItem())
+	if (const AEquipment* Equipment = Inventory->GetCurrentItem())
 	{
 		for (UActorComponent* Component : Equipment->GetComponents())
 		{
@@ -174,7 +174,7 @@ void APlayerCharacter::CycleInventory(const FInputActionValue& Value)
 {
 	if (Inventory == nullptr) return;
 
-	float Direction = Value.GetMagnitude();
+	const float Direction = Value.GetMagnitude();
 
 	(Direction > 0) ? Inventory->CycleInventoryForwards() : Inventory->CycleInventoryBackwards();
 }
