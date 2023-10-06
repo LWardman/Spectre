@@ -1,14 +1,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Equipment/Equipment.h"
+#include "Switchable.h"
 #include "Flashlight.generated.h"
 
 class USpotLightComponent;
 class UPowerSwitch;
 
 UCLASS()
-class SPECTRE_API AFlashlight : public AEquipment
+class SPECTRE_API AFlashlight : public ASwitchable
 {
 	GENERATED_BODY()
 
@@ -19,9 +19,6 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	USpotLightComponent* LightSource;
-
-	UPROPERTY(EditAnywhere)
-	UPowerSwitch* PowerSwitch;
 	
 	virtual void TurnedOn() override;
 

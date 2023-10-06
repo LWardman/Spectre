@@ -9,8 +9,6 @@ AFlashlight::AFlashlight()
 
 	LightSource = CreateDefaultSubobject<USpotLightComponent>(TEXT("Light Source"));
     LightSource->SetupAttachment(Mesh);
-
-    PowerSwitch = CreateDefaultSubobject<UPowerSwitch>(TEXT("Power Switch"));
 }
 
 void AFlashlight::TurnedOn()
