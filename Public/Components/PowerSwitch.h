@@ -4,7 +4,7 @@
 #include "Components/ActorComponent.h"
 #include "PowerSwitch.generated.h"
 
-class ASwitchable;
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSwitchToggled, bool, BTurnedOn);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SPECTRE_API UPowerSwitch : public UActorComponent
@@ -13,14 +13,12 @@ class SPECTRE_API UPowerSwitch : public UActorComponent
 
 public:
 
-	UPowerSwitch();
-
-	ASwitchable* Parent;
-
 	bool bPoweredOn = false;
 
 	bool IsTurnedOn() const;
 
 	void ToggleSwitch();
-		
+
+	UPROPERTY(BlueprintAssignable, Category = "Event Dispatchers")
+	FSwitchToggled SwitchToggled;
 };
