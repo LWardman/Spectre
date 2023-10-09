@@ -15,6 +15,9 @@ class SPECTRE_API ASwitchable : public AEquipment
 public:
 	ASwitchable();
 
+	UFUNCTION()
+	void ToggleEquipment(bool BTurnedOn);
+	
 	virtual void TurnedOn();
 
 	virtual void TurnedOff();
