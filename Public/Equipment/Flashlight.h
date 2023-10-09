@@ -15,16 +15,10 @@ class SPECTRE_API AFlashlight : public ASwitchable
 public:
 	AFlashlight();
 
-public:
-
 	UPROPERTY(EditAnywhere)
 	USpotLightComponent* LightSource;
 	
 	virtual void TurnedOn() override;
 
 	virtual void TurnedOff() override;
-
-	UFUNCTION()
-	void ToggleFlash();
-
 };
