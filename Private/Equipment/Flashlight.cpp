@@ -1,7 +1,6 @@
 #include "Equipment/Flashlight.h"
 
 #include "Components/SpotLightComponent.h"
-#include "Components/PowerSwitch.h"
 
 AFlashlight::AFlashlight()
 {
@@ -15,26 +14,12 @@ void AFlashlight::TurnedOn()
 {
     Super::TurnedOn();
 
-	if (LightSource)
-    {
-        LightSource->SetVisibility(true);
-    }
+	if (LightSource) LightSource->SetVisibility(true);
 }
 
 void AFlashlight::TurnedOff()
 {
     Super::TurnedOff();
 
-	if (LightSource)
-    {
-        LightSource->SetVisibility(false);
-    }
-}
-
-void AFlashlight::ToggleFlash()
-{
-	if (PowerSwitch)
-    {
-        PowerSwitch->ToggleSwitch();
-    }
+	if (LightSource) LightSource->SetVisibility(false);
 }
