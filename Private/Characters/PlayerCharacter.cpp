@@ -37,6 +37,8 @@ void APlayerCharacter::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
+
+	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 }
 
 void APlayerCharacter::Tick(float DeltaTime)
@@ -112,6 +114,8 @@ void APlayerCharacter::Look(const FInputActionValue& Value)
 
 void APlayerCharacter::SprintPressed(const FInputActionValue& Value)
 {
+	if (this->bIsCrouched) return;
+	
 	GetCharacterMovement()->MaxWalkSpeed = SprintSpeed;
 
 	bSprinting = true;
@@ -119,6 +123,7 @@ void APlayerCharacter::SprintPressed(const FInputActionValue& Value)
 
 void APlayerCharacter::SprintHeld(const FInputActionValue& Value)
 {
+	if (this->bIsCrouched) return;
 	if (Stamina == nullptr) return;
 	if (!bSprinting) return;
 	
@@ -134,6 +139,8 @@ void APlayerCharacter::SprintHeld(const FInputActionValue& Value)
 
 void APlayerCharacter::SprintReleased(const FInputActionValue& Value)
 {
+	if (this->bIsCrouched) return;
+	
 	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 
 	bSprinting = false;
@@ -141,7 +148,16 @@ void APlayerCharacter::SprintReleased(const FInputActionValue& Value)
 
 void APlayerCharacter::CrouchPressed(const FInputActionValue& Value)
 {
-	this->Crouch();
+	if (this->bIsCrouched)
+	{
+		this->UnCrouch();
+		GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
+	}
+	else
+	{
+		this->Crouch();
+		GetCharacterMovement()->MaxWalkSpeed = CrouchSpeed;
+	}
 }
 
 void APlayerCharacter::UseEquipment(const FInputActionValue& Value)
