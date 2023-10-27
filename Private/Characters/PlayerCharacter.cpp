@@ -75,7 +75,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(IA_DropItem, ETriggerEvent::Triggered, this, &APlayerCharacter::DropItem);
 
 		// Interact
-		EnhancedInputComponent->BindAction(IA_Interact, ETriggerEvent::Triggered, this, &APlayerCharacter::Interact);
+		EnhancedInputComponent->BindAction(IA_Interact, ETriggerEvent::Started, this, &APlayerCharacter::Interact);
 
 		// HUD
 		EnhancedInputComponent->BindAction(IA_OpenJournal, ETriggerEvent::Triggered, this, &APlayerCharacter::OpenJournal);
@@ -202,7 +202,11 @@ void APlayerCharacter::DropItem(const FInputActionValue& Value)
 
 void APlayerCharacter::Interact(const FInputActionValue& Value)
 {
-	
+	FHitResult Hit = LineTraceForward(750.f);
+
+	// check if blocking actor has a blueprint interface for interacting.
+
+	// Call the blocking actors interact function.
 }
 
 void APlayerCharacter::OpenJournal(const FInputActionValue& Value)
@@ -213,4 +217,23 @@ void APlayerCharacter::OpenJournal(const FInputActionValue& Value)
 void APlayerCharacter::OpenMenu(const FInputActionValue& Value)
 {
 	
+}
+
+FHitResult APlayerCharacter::LineTraceForward(float TraceLength)
+{
+	FHitResult Hit;
+	
+	if (!Camera) return Hit;
+	
+	FVector TraceStart = Camera->GetComponentLocation();
+	FVector TraceEnd = TraceStart + Camera->GetForwardVector() * TraceLength;
+
+	FCollisionQueryParams QueryParams;
+	QueryParams.AddIgnoredActor(this);
+
+	GetWorld()->LineTraceSingleByChannel(Hit, TraceStart, TraceEnd, ECollisionChannel::ECC_WorldDynamic, QueryParams);
+
+	DrawDebugLine(GetWorld(), TraceStart, TraceEnd, Hit.bBlockingHit ? FColor::Blue : FColor::Red, false, 15.0f, 0, 2.0f);
+
+	return Hit;
 }
