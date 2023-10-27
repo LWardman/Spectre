@@ -99,10 +99,10 @@ public:
 
 	void OpenMenu(const FInputActionValue& Value);
 
+	float CrouchSpeed = 250.f;
 	float WalkSpeed = 400.f;
 	float SprintSpeed = 600.f;
 
 	bool bSprinting = false;
 	float SprintDrain = 25.f;
-
 };
