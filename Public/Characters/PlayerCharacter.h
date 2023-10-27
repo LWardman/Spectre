@@ -99,6 +99,8 @@ public:
 
 	void OpenMenu(const FInputActionValue& Value);
 
+	FHitResult LineTraceForward(float TraceLength);
+
 	float CrouchSpeed = 250.f;
 	float WalkSpeed = 400.f;
 	float SprintSpeed = 600.f;
