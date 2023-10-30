@@ -6,20 +6,19 @@
 
 class AEquipment;
 
-
 struct FInventorySlot
 {
 	FInventorySlot(){}
 	FInventorySlot(int32 ID) : SlotID(ID) {}
 
-	FInventorySlot* NextSlot = nullptr;
-	FInventorySlot* PrevSlot = nullptr;
+	TSharedPtr<FInventorySlot> NextSlot;
+	TSharedPtr<FInventorySlot> PrevSlot;
 
 	AEquipment* Equipment = nullptr;
 
 	int32 SlotID = 0;
 
-	void SetSlotLinks(FInventorySlot* _PrevSlot, FInventorySlot* _NextSlot)
+	void SetSlotLinks(const TSharedPtr<FInventorySlot> &_PrevSlot, const TSharedPtr<FInventorySlot> &_NextSlot)
 	{
 		PrevSlot = _PrevSlot;
 		NextSlot = _NextSlot;
@@ -28,6 +27,11 @@ struct FInventorySlot
 	void LogSlotID() const
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Inventory Slot %i"), SlotID);
+	}
+
+	bool IsEmpty() const
+	{
+		return (Equipment == nullptr);
 	}
 };
 
@@ -45,11 +49,11 @@ protected:
 
 public:
 
-	FInventorySlot CurrentSlot;
+	TSharedPtr<FInventorySlot> CurrentSlot;
 
-	FInventorySlot InventorySlot1{1};
-	FInventorySlot InventorySlot2{2};
-	FInventorySlot InventorySlot3{3};
+	TSharedPtr<FInventorySlot> Slot1;
+	TSharedPtr<FInventorySlot> Slot2;
+	TSharedPtr<FInventorySlot> Slot3;
 
 	AEquipment* GetCurrentItem() const;
 
@@ -58,4 +62,6 @@ public:
 	void CycleInventoryBackwards();
 
 	void InitialiseInventory();
+
+	void TryAddItemToInventory(bool bOutSuccess, AEquipment* ItemToAdd);
 };
