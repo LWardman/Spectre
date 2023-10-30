@@ -9,6 +9,8 @@ class UStaminaComponent;
 class UCameraComponent;
 class UInputAction;
 class UInputMappingContext;
+class AEquipment;
+
 struct FInputActionValue;
 
 UCLASS()
@@ -107,4 +109,6 @@ public:
 
 	bool bSprinting = false;
 	float SprintDrain = 25.f;
+
+	void PassEquipmentToInventory(AEquipment* Equipment);
 };
