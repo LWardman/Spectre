@@ -64,4 +64,6 @@ public:
 	void InitialiseInventory();
 
 	void TryAddItemToInventory(bool bOutSuccess, AEquipment* ItemToAdd);
+
+	void DropCurrentItem();
 };
