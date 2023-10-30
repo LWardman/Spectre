@@ -3,6 +3,8 @@
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
 #include "InteractInterface.generated.h"
+
+class APlayerCharacter;
  
 UINTERFACE(MinimalAPI)
 class UInteractInterface : public UInterface
@@ -17,5 +19,5 @@ class SPECTRE_API IInteractInterface
 public:
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void Interact();
+	void Interact(APlayerCharacter* InteractingCharacter);
 };
