@@ -192,7 +192,10 @@ void APlayerCharacter::CycleInventory(const FInputActionValue& Value)
 
 void APlayerCharacter::DropItem(const FInputActionValue& Value)
 {
-	
+	if (Inventory)
+	{
+		Inventory->DropCurrentItem();
+	}
 }
 
 void APlayerCharacter::Interact(const FInputActionValue& Value)
@@ -203,7 +206,7 @@ void APlayerCharacter::Interact(const FInputActionValue& Value)
 
 	if (Hit.GetActor() && Hit.GetActor()->Implements<UInteractInterface>())
 	{
-		IInteractInterface::Execute_Interact(Hit.GetActor());
+		IInteractInterface::Execute_Interact(Hit.GetActor(), this);
 	}
 }
 
@@ -235,3 +238,13 @@ FHitResult APlayerCharacter::LineTraceForward(float TraceLength)
 
 	return Hit;
 }
+
+void APlayerCharacter::PassEquipmentToInventory(AEquipment* Equipment)
+{
+	if (Inventory)
+	{
+		bool bSuccessfulTransfer = false;
+		Inventory->TryAddItemToInventory(bSuccessfulTransfer, Equipment);
+	}
+}
+
