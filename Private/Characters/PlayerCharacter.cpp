@@ -11,7 +11,7 @@
 #include "Components/InventoryComponent.h"
 #include "Components/StaminaComponent.h"
 #include "Equipment/Equipment.h"
-#include "Components/PowerSwitch.h"
+#include "Interfaces/SwitchInterface.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -174,14 +174,11 @@ void APlayerCharacter::ToggleEquipment(const FInputActionValue& Value)
 {
 	if (Inventory == nullptr) return;
 
-	if (const AEquipment* Equipment = Inventory->GetCurrentItem())
+	if (AEquipment* Equipment = Inventory->GetCurrentItem())
 	{
-		for (UActorComponent* Component : Equipment->GetComponents())
+		if (Equipment->Implements<USwitchInterface>())
 		{
-			if (Component->IsA(UPowerSwitch::StaticClass()))
-			{
-				Cast<UPowerSwitch>(Component)->ToggleSwitch();
-			}
+			ISwitchInterface::Execute_Switch(Equipment);
 		}
 	}
 }
@@ -204,9 +201,12 @@ void APlayerCharacter::Interact(const FInputActionValue& Value)
 {
 	FHitResult Hit = LineTraceForward(750.f);
 
-	// check if blocking actor has a blueprint interface for interacting.
+	if (!Hit.bBlockingHit) return;
 
-	// Call the blocking actors interact function.
+	if (Hit.GetActor() && Hit.GetActor()->Implements<UInteractInterface>())
+	{
+		IInteractInterface::Execute_Interact(Hit.GetActor());
+	}
 }
 
 void APlayerCharacter::OpenJournal(const FInputActionValue& Value)
