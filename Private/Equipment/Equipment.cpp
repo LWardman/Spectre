@@ -25,3 +25,8 @@ void AEquipment::UseEquipment()
 {
 
 }
+
+void AEquipment::Interact_Implementation()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Interacted with %s"), *this->GetActorNameOrLabel());
+}
