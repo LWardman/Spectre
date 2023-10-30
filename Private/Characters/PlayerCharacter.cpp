@@ -162,11 +162,9 @@ void APlayerCharacter::CrouchPressed(const FInputActionValue& Value)
 
 void APlayerCharacter::UseEquipment(const FInputActionValue& Value)
 {
-	if (Inventory == nullptr) return;
-
-	if (AEquipment* Equipment = Inventory->GetCurrentItem())
+	if (Inventory && Inventory->GetCurrentItem())
 	{
-		Equipment->UseEquipment();
+		Inventory->GetCurrentItem()->UseEquipment();
 	}
 }
 
@@ -233,7 +231,7 @@ FHitResult APlayerCharacter::LineTraceForward(float TraceLength)
 
 	GetWorld()->LineTraceSingleByChannel(Hit, TraceStart, TraceEnd, ECollisionChannel::ECC_WorldDynamic, QueryParams);
 
-	DrawDebugLine(GetWorld(), TraceStart, TraceEnd, Hit.bBlockingHit ? FColor::Blue : FColor::Red, false, 15.0f, 0, 2.0f);
+	DrawDebugLine(GetWorld(), TraceStart, TraceEnd, Hit.bBlockingHit ? FColor::Blue : FColor::Red, false, 5.0f, 0, 2.0f);
 
 	return Hit;
 }
