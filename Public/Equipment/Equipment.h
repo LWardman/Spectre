@@ -5,6 +5,8 @@
 #include "Interfaces/InteractInterface.h"
 #include "Equipment.generated.h"
 
+class APlayerCharacter;
+
 UCLASS()
 class SPECTRE_API AEquipment : public AActor, public IInteractInterface
 {
@@ -24,5 +26,5 @@ public:
 
 	virtual void UseEquipment();
 
-	virtual void Interact_Implementation() override;
+	virtual void Interact_Implementation(APlayerCharacter* InteractingCharacter) override;
 };
