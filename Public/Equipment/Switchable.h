@@ -3,12 +3,13 @@
 #include "CoreMinimal.h"
 #include "Equipment.h"
 #include "GameFramework/Actor.h"
+#include "Interfaces/SwitchInterface.h"
 #include "Switchable.generated.h"
 
 class UPowerSwitch;
 
 UCLASS()
-class SPECTRE_API ASwitchable : public AEquipment
+class SPECTRE_API ASwitchable : public AEquipment, public ISwitchInterface
 {
 	GENERATED_BODY()
 
@@ -24,4 +25,6 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	UPowerSwitch* PowerSwitch;
+
+	virtual void Switch_Implementation() override;
 };
