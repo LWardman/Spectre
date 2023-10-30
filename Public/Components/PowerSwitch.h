@@ -13,7 +13,7 @@ class SPECTRE_API UPowerSwitch : public UActorComponent
 
 public:
 
-	bool bPoweredOn = false;
+	bool bPoweredOn = true;
 
 	bool IsTurnedOn() const;
 
