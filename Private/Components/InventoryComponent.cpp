@@ -36,9 +36,13 @@ void UInventoryComponent::CycleInventoryForwards()
 {
 	if ( CurrentSlot && CurrentSlot->NextSlot)
 	{
-		CurrentSlot->LogSlotID();
 		CurrentSlot = CurrentSlot->NextSlot;
+		
 		CurrentSlot->LogSlotID();
+		if (!CurrentSlot->IsEmpty())
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Equiped : %s"), *CurrentSlot->Equipment->GetActorNameOrLabel());
+		}
 	}
 }
 
@@ -46,9 +50,13 @@ void UInventoryComponent::CycleInventoryBackwards()
 {
 	if (CurrentSlot && CurrentSlot->PrevSlot)
 	{
-		CurrentSlot->LogSlotID();
 		CurrentSlot = CurrentSlot->PrevSlot;
+		
 		CurrentSlot->LogSlotID();
+		if (!CurrentSlot->IsEmpty())
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Equiped : %s"), *CurrentSlot->Equipment->GetActorNameOrLabel());
+		}
 	}
 }
 
@@ -78,4 +86,9 @@ void UInventoryComponent::TryAddItemToInventory(bool bOutSuccess, AEquipment* It
 			return;
 		}
 	}
+}
+
+void UInventoryComponent::DropCurrentItem()
+{
+	if (GetCurrentItem() == nullptr) return;
 }
