@@ -1,5 +1,7 @@
 #include "Equipment/Equipment.h"
 
+#include "Characters/PlayerCharacter.h"
+
 AEquipment::AEquipment()
 {
  	PrimaryActorTick.bCanEverTick = true;
@@ -26,7 +28,9 @@ void AEquipment::UseEquipment()
 
 }
 
-void AEquipment::Interact_Implementation()
+void AEquipment::Interact_Implementation(APlayerCharacter* InteractingCharacter)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Interacted with %s"), *this->GetActorNameOrLabel());
+
+	InteractingCharacter->PassEquipmentToInventory(this);
 }
