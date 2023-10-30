@@ -29,3 +29,11 @@ void ASwitchable::TurnedOff()
 {
 	UE_LOG(LogTemp, Display, TEXT("Turned Off"));
 }
+
+void ASwitchable::Switch_Implementation()
+{
+	if (PowerSwitch)
+	{
+		PowerSwitch->ToggleSwitch();
+	}
+}
