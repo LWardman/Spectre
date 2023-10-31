@@ -111,4 +111,6 @@ public:
 	float SprintDrain = 25.f;
 
 	void PassEquipmentToInventory(AEquipment* Equipment);
+
+	void EquipItem(const AEquipment* Equipment);
 };
