@@ -1,10 +1,13 @@
 #include "Components/InventoryComponent.h"
 
+#include "Characters/PlayerCharacter.h"
 #include "Equipment/Equipment.h"
 
 
 UInventoryComponent::UInventoryComponent()
 {
+	Parent = Cast<APlayerCharacter>(GetOwner());
+	
 	TSharedRef<FInventorySlot> Slot1Ref(new FInventorySlot(1));
 	TSharedRef<FInventorySlot> Slot2Ref(new FInventorySlot(2));
 	TSharedRef<FInventorySlot> Slot3Ref(new FInventorySlot(3));
@@ -34,28 +37,28 @@ AEquipment* UInventoryComponent::GetCurrentItem() const
 
 void UInventoryComponent::CycleInventoryForwards()
 {
-	if ( CurrentSlot && CurrentSlot->NextSlot)
+	if (Parent && CurrentSlot && CurrentSlot->NextSlot)
 	{
 		CurrentSlot = CurrentSlot->NextSlot;
 		
 		CurrentSlot->LogSlotID();
 		if (!CurrentSlot->IsEmpty())
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Equiped : %s"), *CurrentSlot->Equipment->GetActorNameOrLabel());
+			Parent->EquipItem(GetCurrentItem());
 		}
 	}
 }
 
 void UInventoryComponent::CycleInventoryBackwards()
 {
-	if (CurrentSlot && CurrentSlot->PrevSlot)
+	if (Parent && CurrentSlot && CurrentSlot->PrevSlot)
 	{
 		CurrentSlot = CurrentSlot->PrevSlot;
 		
 		CurrentSlot->LogSlotID();
 		if (!CurrentSlot->IsEmpty())
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Equiped : %s"), *CurrentSlot->Equipment->GetActorNameOrLabel());
+			Parent->EquipItem(GetCurrentItem());
 		}
 	}
 }
@@ -69,11 +72,9 @@ void UInventoryComponent::InitialiseInventory()
 	Slot3->SetSlotLinks(Slot2, Slot1);
 }
 
-void UInventoryComponent::TryAddItemToInventory(bool bOutSuccess, AEquipment* ItemToAdd)
+bool UInventoryComponent::TryAddItemToInventory(AEquipment* ItemToAdd)
 {
-	bOutSuccess = false;
-	
-	if (!CurrentSlot || !CurrentSlot->NextSlot || !CurrentSlot->NextSlot->NextSlot) return;
+	if (!CurrentSlot || !CurrentSlot->NextSlot || !CurrentSlot->NextSlot->NextSlot) return false;
 
 	TArray<TSharedPtr<FInventorySlot>> Slots = {CurrentSlot, CurrentSlot->NextSlot, CurrentSlot->NextSlot->NextSlot};
 
@@ -82,10 +83,16 @@ void UInventoryComponent::TryAddItemToInventory(bool bOutSuccess, AEquipment* It
 		if (Slot.IsValid() && Slot->IsEmpty())
 		{
 			Slot->Equipment = ItemToAdd;
-			bOutSuccess = true;
-			return;
+
+			if (CurrentSlot == Slot && Parent)
+			{
+				Parent->EquipItem(ItemToAdd);
+			}
+			
+			return true;
 		}
 	}
+	return false;
 }
 
 void UInventoryComponent::DropCurrentItem()
