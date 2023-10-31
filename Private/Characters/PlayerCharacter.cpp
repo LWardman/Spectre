@@ -200,7 +200,7 @@ void APlayerCharacter::DropItem(const FInputActionValue& Value)
 
 void APlayerCharacter::Interact(const FInputActionValue& Value)
 {
-	FHitResult Hit = LineTraceForward(750.f);
+	const FHitResult Hit = LineTraceForward(750.f);
 
 	if (!Hit.bBlockingHit) return;
 
@@ -243,8 +243,17 @@ void APlayerCharacter::PassEquipmentToInventory(AEquipment* Equipment)
 {
 	if (Inventory)
 	{
-		bool bSuccessfulTransfer = false;
-		Inventory->TryAddItemToInventory(bSuccessfulTransfer, Equipment);
+
+		if (Inventory->TryAddItemToInventory(Equipment))
+		{
+			// Destroy item
+		}
 	}
 }
 
+void APlayerCharacter::EquipItem(const AEquipment* Equipment)
+{
+	if (Equipment == nullptr) return;
+	
+	UE_LOG(LogTemp, Warning, TEXT("Equipping %s"), *Equipment->GetActorNameOrLabel());
+}
