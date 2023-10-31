@@ -4,6 +4,7 @@
 #include "Components/ActorComponent.h"
 #include "InventoryComponent.generated.h"
 
+class APlayerCharacter;
 class AEquipment;
 
 struct FInventorySlot
@@ -48,6 +49,8 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
+	UPROPERTY()
+	APlayerCharacter* Parent;
 
 	TSharedPtr<FInventorySlot> CurrentSlot;
 
@@ -63,7 +66,7 @@ public:
 
 	void InitialiseInventory();
 
-	void TryAddItemToInventory(bool bOutSuccess, AEquipment* ItemToAdd);
+	bool TryAddItemToInventory(AEquipment* ItemToAdd);
 
 	void DropCurrentItem();
 };
