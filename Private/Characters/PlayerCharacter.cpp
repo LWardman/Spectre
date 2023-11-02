@@ -241,13 +241,11 @@ FHitResult APlayerCharacter::LineTraceForward(float TraceLength)
 
 void APlayerCharacter::PassEquipmentToInventory(AEquipment* Equipment)
 {
-	if (Inventory)
+	if (!Inventory) return;
+	
+	if (Inventory->TryAddItemToInventory(Equipment))
 	{
-
-		if (Inventory->TryAddItemToInventory(Equipment))
-		{
-			// Destroy item
-		}
+		// Destroy item
 	}
 }
 
