@@ -1,5 +1,5 @@
 
-#include "Ghost.h"
+#include "Characters/Ghost.h"
 
 AGhost::AGhost()
 {
