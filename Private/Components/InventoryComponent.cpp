@@ -39,9 +39,16 @@ void UInventoryComponent::CycleInventoryForwards()
 {
 	if (Parent && CurrentSlot && CurrentSlot->NextSlot)
 	{
+		if (AEquipment* Equipment = GetCurrentItem())
+		{
+			Equipment->DetachFromActor(FDetachmentTransformRules::KeepRelativeTransform);
+			SendEquipmentToHide(Equipment);
+		}
+		
 		CurrentSlot = CurrentSlot->NextSlot;
 		
 		CurrentSlot->LogSlotID();
+		
 		if (!CurrentSlot->IsEmpty())
 		{
 			Parent->EquipItem(GetCurrentItem());
@@ -53,9 +60,16 @@ void UInventoryComponent::CycleInventoryBackwards()
 {
 	if (Parent && CurrentSlot && CurrentSlot->PrevSlot)
 	{
+		if (AEquipment* Equipment = GetCurrentItem())
+		{
+			Equipment->DetachFromActor(FDetachmentTransformRules::KeepRelativeTransform);
+			SendEquipmentToHide(Equipment);
+		}
+		
 		CurrentSlot = CurrentSlot->PrevSlot;
 		
 		CurrentSlot->LogSlotID();
+		
 		if (!CurrentSlot->IsEmpty())
 		{
 			Parent->EquipItem(GetCurrentItem());
@@ -98,4 +112,11 @@ bool UInventoryComponent::TryAddItemToInventory(AEquipment* ItemToAdd)
 void UInventoryComponent::DropCurrentItem()
 {
 	if (GetCurrentItem() == nullptr) return;
+}
+
+void UInventoryComponent::SendEquipmentToHide(AEquipment* Equipment)
+{
+	if (Equipment == nullptr) return;
+
+	Equipment->SetActorLocation(HidingPlace);
 }
