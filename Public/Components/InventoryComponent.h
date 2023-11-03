@@ -52,6 +52,8 @@ public:
 	UPROPERTY()
 	APlayerCharacter* Parent;
 
+	FVector HidingPlace = FVector(0, 0, 0);
+
 	TSharedPtr<FInventorySlot> CurrentSlot;
 
 	TSharedPtr<FInventorySlot> Slot1;
@@ -69,4 +71,6 @@ public:
 	bool TryAddItemToInventory(AEquipment* ItemToAdd);
 
 	void DropCurrentItem();
+
+	void SendEquipmentToHide(AEquipment* Equipment);
 };
