@@ -242,16 +242,31 @@ FHitResult APlayerCharacter::LineTraceForward(float TraceLength)
 void APlayerCharacter::PassEquipmentToInventory(AEquipment* Equipment)
 {
 	if (!Inventory) return;
+
+	const bool bHasItemEquipped = (Inventory->GetCurrentItem() != nullptr);
 	
 	if (Inventory->TryAddItemToInventory(Equipment))
 	{
-		// Destroy item
+		if (bHasItemEquipped)
+		{
+			Inventory->SendEquipmentToHide(Equipment);
+		}
+		else
+		{
+			EquipItem(Equipment);
+		}
 	}
 }
 
-void APlayerCharacter::EquipItem(const AEquipment* Equipment)
+void APlayerCharacter::EquipItem(AEquipment* Equipment)
 {
 	if (Equipment == nullptr) return;
 	
 	UE_LOG(LogTemp, Warning, TEXT("Equipping %s"), *Equipment->GetActorNameOrLabel());
+
+	FName Socket = TEXT("RightHandGripPoint");
+
+	FAttachmentTransformRules Rules = FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true);
+	
+	Equipment->AttachToComponent(GetMesh(), Rules, Socket); 
 }
