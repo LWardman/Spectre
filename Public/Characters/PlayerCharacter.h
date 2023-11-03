@@ -112,5 +112,5 @@ public:
 
 	void PassEquipmentToInventory(AEquipment* Equipment);
 
-	void EquipItem(const AEquipment* Equipment);
+	void EquipItem(AEquipment* Equipment);
 };
