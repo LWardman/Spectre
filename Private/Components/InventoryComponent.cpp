@@ -3,14 +3,15 @@
 #include "Characters/PlayerCharacter.h"
 #include "Equipment/Equipment.h"
 
+using FSlotRef = TSharedRef<FInventorySlot>
 
 UInventoryComponent::UInventoryComponent()
 {
 	Parent = Cast<APlayerCharacter>(GetOwner());
 	
-	TSharedRef<FInventorySlot> Slot1Ref(new FInventorySlot(1));
-	TSharedRef<FInventorySlot> Slot2Ref(new FInventorySlot(2));
-	TSharedRef<FInventorySlot> Slot3Ref(new FInventorySlot(3));
+	FSlotRef Slot1Ref(new FInventorySlot(1));
+	FSlotRef Slot2Ref(new FInventorySlot(2));
+	FSlotRef Slot3Ref(new FInventorySlot(3));
     
 	Slot1 = Slot1Ref;
 	Slot2 = Slot2Ref;
@@ -37,22 +38,13 @@ AEquipment* UInventoryComponent::GetCurrentItem() const
 
 void UInventoryComponent::CycleInventoryForwards()
 {
-	if (Parent && CurrentSlot && CurrentSlot->NextSlot)
+	if (CurrentSlot && CurrentSlot->NextSlot)
 	{
-		if (AEquipment* Equipment = GetCurrentItem())
-		{
-			Equipment->DetachFromActor(FDetachmentTransformRules::KeepRelativeTransform);
-			SendEquipmentToHide(Equipment);
-		}
+		HandleRemovingEquipmentFromHand();
 		
 		CurrentSlot = CurrentSlot->NextSlot;
 		
-		CurrentSlot->LogSlotID();
-		
-		if (!CurrentSlot->IsEmpty())
-		{
-			Parent->EquipItem(GetCurrentItem());
-		}
+		HandleEquippingNextItem();
 	}
 }
 
@@ -60,20 +52,11 @@ void UInventoryComponent::CycleInventoryBackwards()
 {
 	if (Parent && CurrentSlot && CurrentSlot->PrevSlot)
 	{
-		if (AEquipment* Equipment = GetCurrentItem())
-		{
-			Equipment->DetachFromActor(FDetachmentTransformRules::KeepRelativeTransform);
-			SendEquipmentToHide(Equipment);
-		}
+		HandleRemovingEquipmentFromHand();
 		
 		CurrentSlot = CurrentSlot->PrevSlot;
 		
-		CurrentSlot->LogSlotID();
-		
-		if (!CurrentSlot->IsEmpty())
-		{
-			Parent->EquipItem(GetCurrentItem());
-		}
+		HandleEquippingNextItem();
 	}
 }
 
@@ -90,19 +73,13 @@ bool UInventoryComponent::TryAddItemToInventory(AEquipment* ItemToAdd)
 {
 	if (!CurrentSlot || !CurrentSlot->NextSlot || !CurrentSlot->NextSlot->NextSlot) return false;
 
-	TArray<TSharedPtr<FInventorySlot>> Slots = {CurrentSlot, CurrentSlot->NextSlot, CurrentSlot->NextSlot->NextSlot};
+	TArray<FSlotPtr> Slots = {CurrentSlot, CurrentSlot->NextSlot, CurrentSlot->NextSlot->NextSlot};
 
-	for (TSharedPtr<FInventorySlot> Slot : Slots)
+	for (FSlotPtr Slot : Slots)
 	{
 		if (Slot.IsValid() && Slot->IsEmpty())
 		{
 			Slot->Equipment = ItemToAdd;
-
-			if (CurrentSlot == Slot && Parent)
-			{
-				Parent->EquipItem(ItemToAdd);
-			}
-			
 			return true;
 		}
 	}
@@ -119,4 +96,24 @@ void UInventoryComponent::SendEquipmentToHide(AEquipment* Equipment)
 	if (Equipment == nullptr) return;
 
 	Equipment->SetActorLocation(HidingPlace);
+}
+
+void UInventoryComponent::HandleRemovingEquipmentFromHand()
+{
+	if (AEquipment* Equipment = GetCurrentItem())
+	{
+		Equipment->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		SendEquipmentToHide(Equipment);
+		Equipment->SetSimulatePhysicsAndCollision(true);
+	}
+}
+
+void UInventoryComponent::HandleEquippingNextItem()
+{
+	if (!CurrentSlot || !Parent) return;
+		
+	if (AEquipment* Equipment = GetCurrentItem())
+	{
+		Parent->EquipItem(Equipment);
+	}
 }
