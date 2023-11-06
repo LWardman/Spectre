@@ -7,19 +7,21 @@
 class APlayerCharacter;
 class AEquipment;
 
+using FSlotPtr = TSharedPtr<struct FInventorySlot>;
+
 struct FInventorySlot
 {
 	FInventorySlot(){}
 	FInventorySlot(int32 ID) : SlotID(ID) {}
 
-	TSharedPtr<FInventorySlot> NextSlot;
-	TSharedPtr<FInventorySlot> PrevSlot;
+	FSlotPtr NextSlot;
+	FSlotPtr PrevSlot;
 
 	AEquipment* Equipment = nullptr;
 
 	int32 SlotID = 0;
 
-	void SetSlotLinks(const TSharedPtr<FInventorySlot> &_PrevSlot, const TSharedPtr<FInventorySlot> &_NextSlot)
+	void SetSlotLinks(const FSlotPtr &_PrevSlot, const FSlotPtr &_NextSlot)
 	{
 		PrevSlot = _PrevSlot;
 		NextSlot = _NextSlot;
@@ -54,11 +56,11 @@ public:
 
 	FVector HidingPlace = FVector(0, 0, 0);
 
-	TSharedPtr<FInventorySlot> CurrentSlot;
+	FSlotPtr CurrentSlot;
 
-	TSharedPtr<FInventorySlot> Slot1;
-	TSharedPtr<FInventorySlot> Slot2;
-	TSharedPtr<FInventorySlot> Slot3;
+	FSlotPtr Slot1;
+	FSlotPtr Slot2;
+	FSlotPtr Slot3;
 
 	AEquipment* GetCurrentItem() const;
 
@@ -73,4 +75,8 @@ public:
 	void DropCurrentItem();
 
 	void SendEquipmentToHide(AEquipment* Equipment);
+
+	void HandleRemovingEquipmentFromHand();
+
+	void HandleEquippingNextItem();
 };
