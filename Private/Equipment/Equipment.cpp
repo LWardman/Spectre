@@ -9,14 +9,12 @@ AEquipment::AEquipment()
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 }
 
-// Called when the game starts or when spawned
 void AEquipment::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
-// Called every frame
 void AEquipment::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -30,7 +28,25 @@ void AEquipment::UseEquipment()
 
 void AEquipment::Interact_Implementation(APlayerCharacter* InteractingCharacter)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Interacted with %s"), *this->GetActorNameOrLabel());
+	//UE_LOG(LogTemp, Warning, TEXT("Interacted with %s"), *this->GetActorNameOrLabel());
 
 	InteractingCharacter->PassEquipmentToInventory(this);
+}
+
+void AEquipment::SetSimulatePhysicsAndCollision(bool bSimulatePhysics)
+{
+	if (Mesh)
+	{
+		Mesh->SetSimulatePhysics(bSimulatePhysics);
+
+		if (bSimulatePhysics)
+		{
+			Mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+		}
+		else
+		{
+			Mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
+		}
+		
+	}
 }
