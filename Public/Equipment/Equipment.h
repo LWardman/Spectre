@@ -27,4 +27,6 @@ public:
 	virtual void UseEquipment();
 
 	virtual void Interact_Implementation(APlayerCharacter* InteractingCharacter) override;
+
+	void SetSimulatePhysicsAndCollision(bool bSimulatePhysics);
 };
