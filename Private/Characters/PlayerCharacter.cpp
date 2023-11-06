@@ -187,7 +187,27 @@ void APlayerCharacter::CycleInventory(const FInputActionValue& Value)
 
 	const float Direction = Value.GetMagnitude();
 
-	(Direction > 0) ? Inventory->CycleInventoryForwards() : Inventory->CycleInventoryBackwards();
+	Inventory->HandleRemovingEquipmentFromHand();
+
+	if (Direction > 0)
+	{
+		if (Inventory->CurrentSlot && Inventory->CurrentSlot->NextSlot)
+		{
+			Inventory->CurrentSlot = Inventory->CurrentSlot->NextSlot;
+		}
+	}
+	else
+	{
+		if (Inventory->CurrentSlot && Inventory->CurrentSlot->PrevSlot)
+		{
+			Inventory->CurrentSlot = Inventory->CurrentSlot->PrevSlot;
+		}
+	}
+
+	if (AEquipment* Equipment = Inventory->GetCurrentItem())
+	{
+		EquipItem(Equipment);
+	}
 }
 
 void APlayerCharacter::DropItem(const FInputActionValue& Value)
@@ -241,7 +261,7 @@ FHitResult APlayerCharacter::LineTraceForward(float TraceLength)
 
 void APlayerCharacter::PassEquipmentToInventory(AEquipment* Equipment)
 {
-	if (!Inventory) return;
+	if (!Inventory || !Equipment) return;
 
 	const bool bHasItemEquipped = (Inventory->GetCurrentItem() != nullptr);
 	
@@ -267,6 +287,8 @@ void APlayerCharacter::EquipItem(AEquipment* Equipment)
 	FName Socket = TEXT("RightHandGripPoint");
 
 	FAttachmentTransformRules Rules = FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true);
+
+	Equipment->SetSimulatePhysicsAndCollision(false);
 	
 	Equipment->AttachToComponent(GetMesh(), Rules, Socket); 
 }
