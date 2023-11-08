@@ -3,7 +3,7 @@
 #include "Characters/PlayerCharacter.h"
 #include "Equipment/Equipment.h"
 
-using FSlotRef = TSharedRef<FInventorySlot>
+using FSlotRef = TSharedRef<FInventorySlot>;
 
 UInventoryComponent::UInventoryComponent()
 {
@@ -88,7 +88,16 @@ bool UInventoryComponent::TryAddItemToInventory(AEquipment* ItemToAdd)
 
 void UInventoryComponent::DropCurrentItem()
 {
-	if (GetCurrentItem() == nullptr) return;
+	if (AEquipment* Equipment = GetCurrentItem())
+	{
+		Equipment->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		Equipment->SetSimulatePhysicsAndCollision(true);
+
+		if (CurrentSlot)
+		{
+			CurrentSlot->Equipment = nullptr;
+		}
+	}
 }
 
 void UInventoryComponent::SendEquipmentToHide(AEquipment* Equipment)
@@ -103,8 +112,8 @@ void UInventoryComponent::HandleRemovingEquipmentFromHand()
 	if (AEquipment* Equipment = GetCurrentItem())
 	{
 		Equipment->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-		SendEquipmentToHide(Equipment);
 		Equipment->SetSimulatePhysicsAndCollision(true);
+		SendEquipmentToHide(Equipment);
 	}
 }
 
