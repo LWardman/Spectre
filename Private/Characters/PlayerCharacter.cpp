@@ -8,7 +8,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Camera/CameraComponent.h"
 
-#include "Components/InventoryComponent.h"
+#include "Components/Inventory/InventoryComponent.h"
 #include "Components/StaminaComponent.h"
 #include "Equipment/Equipment.h"
 #include "Interfaces/SwitchInterface.h"
@@ -185,24 +185,13 @@ void APlayerCharacter::CycleInventory(const FInputActionValue& Value)
 {
 	if (Inventory == nullptr) return;
 
+	bItemEquipped = false;
+
 	const float Direction = Value.GetMagnitude();
 
 	Inventory->HandleRemovingEquipmentFromHand();
 
-	if (Direction > 0)
-	{
-		if (Inventory->CurrentSlot && Inventory->CurrentSlot->NextSlot)
-		{
-			Inventory->CurrentSlot = Inventory->CurrentSlot->NextSlot;
-		}
-	}
-	else
-	{
-		if (Inventory->CurrentSlot && Inventory->CurrentSlot->PrevSlot)
-		{
-			Inventory->CurrentSlot = Inventory->CurrentSlot->PrevSlot;
-		}
-	}
+	(Direction > 0) ? Inventory->CycleInventoryForwards() : Inventory->CycleInventoryBackwards();
 
 	if (AEquipment* Equipment = Inventory->GetCurrentItem())
 	{
@@ -284,11 +273,13 @@ void APlayerCharacter::EquipItem(AEquipment* Equipment)
 	
 	UE_LOG(LogTemp, Warning, TEXT("Equipping %s"), *Equipment->GetActorNameOrLabel());
 
-	FName Socket = TEXT("RightHandGripPoint");
+	const FName Socket = TEXT("RightHandGripPoint");
 
-	FAttachmentTransformRules Rules = FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true);
+	const FAttachmentTransformRules Rules = FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true);
 
 	Equipment->SetSimulatePhysicsAndCollision(false);
 	
-	Equipment->AttachToComponent(GetMesh(), Rules, Socket); 
+	Equipment->AttachToComponent(GetMesh(), Rules, Socket);
+
+	bItemEquipped = true;
 }
