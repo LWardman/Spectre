@@ -1,4 +1,4 @@
-#include "Components/InventoryComponent.h"
+#include "Components/Inventory/InventoryComponent.h"
 
 #include "Characters/PlayerCharacter.h"
 #include "Equipment/Equipment.h"
@@ -40,23 +40,15 @@ void UInventoryComponent::CycleInventoryForwards()
 {
 	if (CurrentSlot && CurrentSlot->NextSlot)
 	{
-		HandleRemovingEquipmentFromHand();
-		
 		CurrentSlot = CurrentSlot->NextSlot;
-		
-		HandleEquippingNextItem();
 	}
 }
 
 void UInventoryComponent::CycleInventoryBackwards()
 {
-	if (Parent && CurrentSlot && CurrentSlot->PrevSlot)
+	if (CurrentSlot && CurrentSlot->PrevSlot)
 	{
-		HandleRemovingEquipmentFromHand();
-		
 		CurrentSlot = CurrentSlot->PrevSlot;
-		
-		HandleEquippingNextItem();
 	}
 }
 
