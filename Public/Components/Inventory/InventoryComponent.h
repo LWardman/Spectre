@@ -27,15 +27,9 @@ struct FInventorySlot
 		NextSlot = _NextSlot;
 	}
 
-	void LogSlotID() const
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Inventory Slot %i"), SlotID);
-	}
-
-	bool IsEmpty() const
-	{
-		return (Equipment == nullptr);
-	}
+	void LogSlotID() const { UE_LOG(LogTemp, Warning, TEXT("Inventory Slot %i"), SlotID); }
+	
+	bool IsEmpty() const { return (Equipment == nullptr); }
 };
 
 
@@ -56,11 +50,7 @@ public:
 
 	FVector HidingPlace = FVector(0, 0, 0);
 
-	FSlotPtr CurrentSlot;
-
-	FSlotPtr Slot1;
-	FSlotPtr Slot2;
-	FSlotPtr Slot3;
+	FSlotPtr Slot1, Slot2, Slot3, CurrentSlot;			// All initialised in constructor
 
 	AEquipment* GetCurrentItem() const;
 
