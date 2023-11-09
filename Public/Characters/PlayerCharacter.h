@@ -113,4 +113,7 @@ public:
 	void PassEquipmentToInventory(AEquipment* Equipment);
 
 	void EquipItem(AEquipment* Equipment);
+
+	UPROPERTY(BlueprintReadOnly)
+	bool bItemEquipped = false;
 };
