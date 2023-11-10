@@ -114,6 +114,14 @@ public:
 
 	void EquipItem(AEquipment* Equipment);
 
+	float CalculateAngleBetweenCameraAndForward(FVector CameraForward, FVector ActorForward);
+
 	UPROPERTY(BlueprintReadOnly)
 	bool bItemEquipped = false;
+
+	UPROPERTY(BlueprintReadOnly)
+	float AngleBetweenCameraAndForward = 0.0f;
+
+	UPROPERTY(BlueprintReadOnly)
+	double NeckSocketRoll;
 };
