@@ -7,6 +7,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Camera/CameraComponent.h"
+#include "Engine/SkeletalMeshSocket.h"
 
 #include "Components/Inventory/InventoryComponent.h"
 #include "Components/StaminaComponent.h"
@@ -39,6 +40,11 @@ void APlayerCharacter::BeginPlay()
 	}
 
 	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
+
+	if (const USkeletalMeshSocket* NeckSocket = GetMesh()->GetSocketByName("Neck"))
+	{
+		NeckSocketRoll = NeckSocket->GetSocketLocalTransform().Rotator().Roll;
+	}
 }
 
 void APlayerCharacter::Tick(float DeltaTime)
@@ -109,6 +115,14 @@ void APlayerCharacter::Look(const FInputActionValue& Value)
 	{
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(-LookAxisVector.Y);
+	}
+
+	if (Camera)
+	{
+		AngleBetweenCameraAndForward = CalculateAngleBetweenCameraAndForward(
+			Camera->GetForwardVector(),
+			GetActorForwardVector()
+			);
 	}
 }
 
@@ -282,4 +296,20 @@ void APlayerCharacter::EquipItem(AEquipment* Equipment)
 	Equipment->AttachToComponent(GetMesh(), Rules, Socket);
 
 	bItemEquipped = true;
+}
+
+float APlayerCharacter::CalculateAngleBetweenCameraAndForward(FVector CameraForward, FVector ActorForward)
+{
+	CameraForward.Normalize();
+	ActorForward.Normalize();
+
+	if (!CameraForward.IsNormalized() || !ActorForward.IsNormalized()) return 0.0f;
+	
+	const float DotProduct = FVector::DotProduct(CameraForward, ActorForward);
+
+	const float AngleInDegrees = (acos(DotProduct) * 360) / (2 * PI);
+
+	if (CameraForward.Z < 0.0) return -AngleInDegrees;
+
+	return AngleInDegrees;
 }
