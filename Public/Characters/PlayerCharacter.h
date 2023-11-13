@@ -124,4 +124,7 @@ public:
 
 	UPROPERTY(BlueprintReadOnly)
 	double NeckSocketRoll;
+
+	UPROPERTY(BlueprintReadOnly)
+	double RightShoulderSocketRoll;
 };
