@@ -45,6 +45,11 @@ void APlayerCharacter::BeginPlay()
 	{
 		NeckSocketRoll = NeckSocket->GetSocketLocalTransform().Rotator().Roll;
 	}
+
+	if (const USkeletalMeshSocket* RightShoulderSocket = GetMesh()->GetSocketByName("RightShoulder"))
+	{
+		RightShoulderSocketRoll = RightShoulderSocket->GetSocketLocalTransform().Rotator().Roll;
+	}
 }
 
 void APlayerCharacter::Tick(float DeltaTime)
