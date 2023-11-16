@@ -20,5 +20,5 @@ protected:
 public:	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	
+	void SpawnEMFEvent(int32 Level, float Radius, FVector Center);
 };
