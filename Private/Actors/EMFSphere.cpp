@@ -16,6 +16,8 @@ void AEMFSphere::Initialise(int32 EMF_Level, float EMF_Radius, FVector EMF_Cente
 	EMF = EMF_Level;
 	Radius = EMF_Radius;
 	Center = EMF_Center;
+
+	this->SetActorLocation(Center);
 }
 
 void AEMFSphere::SpawnEMF()
