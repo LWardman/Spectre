@@ -5,6 +5,8 @@
 #include "GameFramework/Character.h"
 #include "Ghost.generated.h"
 
+class UEMFGenerator;
+
 UCLASS()
 class SPECTRE_API AGhost : public ACharacter
 {
@@ -18,6 +20,9 @@ protected:
 
 public:	
 	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY()
+	UEMFGenerator* EMF_Generator;
 
 	// These stats will be used on a scale of 0 - 10, 5 being default.
 	
