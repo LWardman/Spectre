@@ -5,6 +5,8 @@
 #include "GameFramework/Actor.h"
 #include "EMFSphere.generated.h"
 
+class UCapsuleComponent;
+
 UCLASS()
 class SPECTRE_API AEMFSphere : public AActor
 {
@@ -16,7 +18,9 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-public:	
+public:
+	UPROPERTY()
+	UCapsuleComponent* CollisionCapsule;
 
 	int32 EMF = 0;
 
@@ -24,10 +28,11 @@ public:
 
 	FVector Center = FVector::ZeroVector;
 
+	float Lifetime = 10.0f;
+
 	void Initialise(int32 EMF_Level, float EMF_Radius, FVector EMF_Center);
 
-	void SpawnEMF();
+	void OnDestruct();
 
 	FTimerHandle DestructHandle;
-
 };
