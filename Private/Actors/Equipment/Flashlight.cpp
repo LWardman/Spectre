@@ -1,4 +1,4 @@
-#include "Equipment/Flashlight.h"
+#include "Actors/Equipment/Flashlight.h"
 
 #include "Components/SpotLightComponent.h"
 

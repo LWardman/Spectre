@@ -1,4 +1,4 @@
-#include "Equipment/Equipment.h"
+#include "Actors/Equipment/Equipment.h"
 
 #include "Characters/PlayerCharacter.h"
 

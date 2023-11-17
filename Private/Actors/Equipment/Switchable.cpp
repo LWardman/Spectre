@@ -1,4 +1,4 @@
-#include "Equipment/Switchable.h"
+#include "Actors/Equipment/Switchable.h"
 
 #include "Components/PowerSwitch.h"
 
