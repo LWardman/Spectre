@@ -1,7 +1,7 @@
 #include "Components/Inventory/InventoryComponent.h"
 
 #include "Characters/PlayerCharacter.h"
-#include "Equipment/Equipment.h"
+#include "Actors/Equipment/Equipment.h"
 
 using FSlotRef = TSharedRef<FInventorySlot>;
 
