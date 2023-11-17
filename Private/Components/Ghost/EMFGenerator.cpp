@@ -26,6 +26,5 @@ void UEMFGenerator::SpawnEMFEvent(int32 Level, float Radius, FVector Center)
 	if (AEMFSphere* EMF = Cast<AEMFSphere>(EMF_Sphere))
 	{
 		EMF->Initialise(Level, Radius, Center);
-		EMF->SpawnEMF();
 	}
 }
