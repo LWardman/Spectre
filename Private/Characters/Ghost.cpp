@@ -1,14 +1,23 @@
 
 #include "Characters/Ghost.h"
 
+#include "Components/Ghost/EMFGenerator.h"
+
 AGhost::AGhost()
 {
 	PrimaryActorTick.bCanEverTick = true;
+
+	EMF_Generator = CreateDefaultSubobject<UEMFGenerator>(TEXT("EMF Generator"));
 }
 
 void AGhost::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (EMF_Generator)
+	{
+		EMF_Generator->SpawnEMFEvent(5, 100.0f, this->GetActorLocation());
+	}
 }
 
 void AGhost::Tick(float DeltaTime)
