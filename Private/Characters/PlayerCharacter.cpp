@@ -11,7 +11,7 @@
 
 #include "Components/Inventory/InventoryComponent.h"
 #include "Components/StaminaComponent.h"
-#include "Equipment/Equipment.h"
+#include "Actors/Equipment/Equipment.h"
 #include "Interfaces/SwitchInterface.h"
 
 APlayerCharacter::APlayerCharacter()
