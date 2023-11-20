@@ -2,6 +2,7 @@
 
 #include "Components/SpotLightComponent.h"
 
+
 AFlashlight::AFlashlight()
 {
  	PrimaryActorTick.bCanEverTick = false;
