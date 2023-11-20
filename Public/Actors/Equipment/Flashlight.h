@@ -5,7 +5,6 @@
 #include "Flashlight.generated.h"
 
 class USpotLightComponent;
-class UPowerSwitch;
 
 UCLASS()
 class SPECTRE_API AFlashlight : public ASwitchable
