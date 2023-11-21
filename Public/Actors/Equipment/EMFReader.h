@@ -14,10 +14,6 @@ class SPECTRE_API AEMFReader : public ASwitchable
 
 public:
 	AEMFReader();
-	
-	virtual void TurnedOn() override;
-
-	virtual void TurnedOff() override;
 
 	UPROPERTY(EditAnywhere)
 	UPointLightComponent* PowerIndicator;
@@ -36,4 +32,13 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	UPointLightComponent* Level_5_Indicator;
+
+	TArray<UPointLightComponent*> EMFIndicators;
+
+	virtual void TurnedOn() override;
+
+	virtual void TurnedOff() override;
+
+	void RecieveEMFSignal(int32 EMF_Level);
+	
 };
